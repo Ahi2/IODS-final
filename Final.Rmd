@@ -1,0 +1,7 @@
+---
+title: "final.Rmd"
+author: "Mohamadali Ahi; mohamadali.ahi@helsinki.fi"
+date: "15 joulukuuta 2017"
+output: html_document
+---
+

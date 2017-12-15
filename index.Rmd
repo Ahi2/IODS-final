@@ -8,4 +8,9 @@ output:
 
 ---
 
-
+***
+  
+```{r child = "final.Rmd"}
+```
+  
+***
