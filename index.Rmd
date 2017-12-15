@@ -1,0 +1,11 @@
+---
+title: "IODS-final"
+author: "Mohamadali Ahi"
+date: "15 joulukuuta 2017"
+output:
+  html_document:
+    df_print: paged
+
+---
+
+
