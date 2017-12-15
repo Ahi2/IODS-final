@@ -8,9 +8,7 @@ output:
 
 ---
 
-***
-  
-```{r child = "final.Rmd"}
-```
-  
-***
+In the assignment the follwing are going to be conducted:
+
+# hypotheses
+The hypotheses are as follow
