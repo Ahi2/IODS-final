@@ -1,6 +1,7 @@
 ---
 title: "IODS-final"
 author: "Mohamadali Ahi"
+Email: mohamadali.ahi@helsinki.fi 
 date: "15 joulukuuta 2017"
 output:
   html_document:
