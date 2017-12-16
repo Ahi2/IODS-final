@@ -25,5 +25,14 @@ colnames(gii)
 
 colnames(gii) <- c("GII.Rank", "Country", "GII", "Mat.Mor", "Ado.Birth", "Parli.F", "Edu2.F", "Edu2.M", "Labo.F", "Labo.M")
 
+gii <- mutate(gii, Edu2.FM = Edu2.F/Edu2.M)
 
+gii<- mutate(gii, Labo.FM = Labo.F/Labo.M)
+
+join_by <- c("Country")
+
+human2 <- inner_join(hd, gii, by = join_by, suffix = c(".hd", ".gii"))
+
+dim(human2)
+colnames(human2)
 
