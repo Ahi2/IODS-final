@@ -16,7 +16,7 @@ H1. Gross National Income (GNP) per capita positively affects life expectancy at
 
 # Reading the data into R
 
-We first start with the first hypothesis. For that, we need to read the human dataset which has been prepared here, using data wrangling procedure as explained in the link: [linked here] (https://github.com/Ahi2/IODS-final/blob/master/create_human2.R)
+We first start with the first hypothesis. For that, we need to read the human dataset which has been prepared [here](https://github.com/Ahi2/IODS-final/blob/master/create_human2.R), using data wrangling procedure as explained in the link.
 
 Due to an error at the end of the data wrangling, I need to read the data again, calling it 'human2'. Then, I look at the dtructure, dimensions, and a summary of the dataset.
 
