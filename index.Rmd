@@ -12,9 +12,45 @@ In the assignment the follwing are going to be conducted:
 
 # hypotheses
 The hypotheses are as follows:
-H1. There is a positive relationship between weekly study time and students' final grade.
-H2. There is a negative relationship between Weekday alcohoal consumption and students' final grades. 
+H1. The quality of family relationship and the amount of free time after school positively affect students' final grade.
+H2. Final grade can be classified by the time spent studying; as such, the higher the grade, the higher the study time.  
 
-We first start with the first hypotheses. For that, we need to read the Student Performance dataset 
+We first start with the first hypothesis. For that, we need to read the Student Performance dataset. I have already created a dataset called 'fam', which is a cobmination of observation from students in two classes: Math and Portuguese. Before that, however, let us access the libraries we need.
 
+```{r}
+library(tidyr)
 
+library(dplyr)
+
+library(ggplot2)
+
+library(GGally)
+```
+
+Now I read the data into R.
+
+```{r}
+fam <- read.table("C:/Data/IODS-final/fam.csv", sep=",", header=TRUE)
+```
+
+The first hypothesis can be tested using a linear regression. This is the first part of my assignment. 
+
+# 1. Multiple Linear Regression 
+
+To know the dataset well, I first look at the names of the variables.
+
+```{r}
+colnames(fam)
+```
+
+Before proceeding to the regression, it would be a good idea to look at the relationship between variables and their distributions.   
+
+```{r}
+p <- ggpairs(fam, mapping = aes (col = sex, alpha = 0.3), lower = list(combo = wrap("facethist", bins = 20)))
+
+p
+```
+
+```{r}
+pairs(fam)
+```
