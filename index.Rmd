@@ -38,10 +38,54 @@ library(dplyr)
 library(ggplot2)
 
 library(GGally)
+
+library(corrplot)
 ```
 
 
 # 1. Multiple Linear Regression 
 
+```{r}
+ggpairs(human2)
+```
+
+```{r}
+cor(human2) %>% corrplot
+```
+
+
+```{r}
+qplot(GNI, Life.Exp, data = human2) + geom_smooth(method = "lm")
+
+```
+
+Removing outliers. 
+```{r}
+human2 <- filter(human2, GNI < 80000)
+```
+
+
+```{r}
+qplot(GNI, Life.Exp, data = human2) + geom_smooth(method = "lm")
+
+```
+
+
+```{r}
+my_model <- lm(Life.Exp ~ GNI, data = human2) 
+summary(my_model)
+```
+
+
+```{r}
+my_model2 <- lm(Life.Exp ~ GNI + Mat.Mor, data = human2)
+summary(my_model2)
+```
+
+
+```{r}
+par(mfrow = c(2,2))
+plot(my_model2, which = c(1,2,5))
+```
 
 
