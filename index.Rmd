@@ -12,10 +12,23 @@ In the assignment the follwing are going to be conducted:
 
 # hypotheses
 The hypotheses are as follows:
-H1. The quality of family relationship and the amount of free time after school positively affect students' final grade.
-H2. Final grade can be classified by the time spent studying; as such, the higher the grade, the higher the study time.  
+H1. Gross National Income (GNP) per capita positively affects life expectancy at birth.
 
-We first start with the first hypothesis. For that, we need to read the Student Performance dataset. I have already created a dataset called 'fam', which is a cobmination of observation from students in two classes: Math and Portuguese. Before that, however, let us access the libraries we need.
+# Reading the data into R
+
+We first start with the first hypothesis. For that, we need to read the human dataset which has been prepared here, using data wrangling procedure as explained in the link: [linked here] (https://github.com/Ahi2/IODS-final/blob/master/create_human2.R)
+
+Due to an error at the end of the data wrangling, I need to read the data again, calling it 'human2'. Then, I look at the dtructure, dimensions, and a summary of the dataset.
+
+```{r}
+human2 <- read.table("http://s3.amazonaws.com/assets.datacamp.com/production/course_2218/datasets/human2.txt", sep  =",", header = T)
+
+str(human2)
+dim(human2)
+summary(human2)
+```
+
+Now, let us access the libraries we need.
 
 ```{r}
 library(tidyr)
@@ -27,30 +40,8 @@ library(ggplot2)
 library(GGally)
 ```
 
-Now I read the data into R.
-
-```{r}
-fam <- read.table("C:/Data/IODS-final/fam.csv", sep=",", header=TRUE)
-```
-
-The first hypothesis can be tested using a linear regression. This is the first part of my assignment. 
 
 # 1. Multiple Linear Regression 
 
-To know the dataset well, I first look at the names of the variables.
 
-```{r}
-colnames(fam)
-```
 
-Before proceeding to the regression, it would be a good idea to look at the relationship between variables and their distributions.   
-
-```{r}
-p <- ggpairs(fam, mapping = aes (col = sex, alpha = 0.3), lower = list(combo = wrap("facethist", bins = 20)))
-
-p
-```
-
-```{r}
-pairs(fam)
-```
