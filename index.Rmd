@@ -8,7 +8,13 @@ output:
 
 ---
 
-In the assignment the follwing are going to be conducted:
+In the assignment the follwing are going to be conducted: 
 
 # hypotheses
-The hypotheses are as follow
+The hypotheses are as follows:
+H1. There is a positive relationship between weekly study time and students' final grade.
+H2. There is a negative relationship between Weekday alcohoal consumption and students' final grades. 
+
+We first start with the first hypotheses. For that, we need to read the Student Performance dataset 
+
+
