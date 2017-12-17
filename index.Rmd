@@ -14,11 +14,15 @@ In the assignment the follwing are going to be conducted:
 The hypotheses are as follows:
 H1. Gross National Income (GNP) per capita positively affects life expectancy at birth.
 
+# 1. Multiple Linear Regression
+
+I first begin with testing the first hypothesis. To do so, I need to conducta multiple linear analysis. 
+
 # Reading the data into R
 
 We first start with the first hypothesis. For that, we need to read the human dataset which has been prepared [here](https://github.com/Ahi2/IODS-final/blob/master/create_human2.R), using data wrangling procedure as explained in the link.
 
-Due to an error at the end of the data wrangling, I need to read the data again, calling it 'human2'. Then, I look at the dtructure, dimensions, and a summary of the dataset.
+I first read the data again to make sure I am using the correct data. I call it 'human2'. Then, I look at the dtructure, dimensions, and a summary of the dataset.
 
 ```{r}
 human2 <- read.table("http://s3.amazonaws.com/assets.datacamp.com/production/course_2218/datasets/human2.txt", sep  =",", header = T)
@@ -40,6 +44,8 @@ library(ggplot2)
 library(GGally)
 
 library(corrplot)
+
+library(MASS)
 ```
 
 
@@ -67,7 +73,6 @@ human2 <- filter(human2, GNI < 80000)
 
 ```{r}
 qplot(GNI, Life.Exp, data = human2) + geom_smooth(method = "lm")
-
 ```
 
 
@@ -86,6 +91,60 @@ summary(my_model2)
 ```{r}
 par(mfrow = c(2,2))
 plot(my_model2, which = c(1,2,5))
+```
+
+
+# 2. Linear Discriminant Analysis (LDA)
+
+LDA is a supervised classification method which can be used to model several binory vairbales. LDA is a linear transfomration technique used for dimensionality reduction. The independent variables are continuous while the target variables are categorical (binory). 
+
+In this assignment, I am going to use different calsses of GNI as the target variable to see how other variables epxplain the classes. 
+
+Because an assumption in LDA is that the variables are normally distributed, it is better to first standardize the data before performing the analysis. TO do so, I scale the whole dataset. 
+
+# 2.1. Scaling Dataset  
+
+```{r}
+human2_scaled <- scale(human2)
+summary(human2_scaled)
+```
+
+Now we look at the class of the scaled object, and convert the human2_scaled to a dataframe format.
+```{r}
+class(human2_scaled)
+human2_scaled <- as.data.frame(human2_scaled)
+```
+
+# 2.2. Creating a categorical variable from GNI
+Because I am interested in different classes of GNI explained by other variables, I now create categorical variables from GNI - which is a continous variable. I cut the variable by quantiles to get high, low, and middle rates of GNI per capita. Each quantile indicates the wealth of a country population. For example, high and low indicate wealthy and poor population, respectively.  
+
+First, I look at the summary of GNI.
+
+```{r}
+summary(human2_scaled$GNI)
+```
+
+Now, I create a quantile vector of GNI and will print it. 
+
+```{r}
+bins <- quantile(human2_scaled$GNI)
+bins
+```
+
+Now, I create the categorical variable, calling it GNI_class. Then, I will look at the table of the new factor GNI_class. 
+```{r}
+GNI_class <- cut(human2_scaled$GNI, breaks = bins, include.lowest = TRUE, c(label = "low", "med_low", "med_high", "high"))
+table(GNI_class)
+```
+
+I now remove the original GNI from the dataset
+```{r}
+human2_scaled <- dplyr::select(human2_scaled, -GNI)
+```
+
+Then, I add the new categorical value, GNI_class, to scaled data.
+```{r}
+human2_scaled <- data.frame(human2_scaled, GNI_class)
 ```
 
 
