@@ -8,6 +8,9 @@ output:
     theme: cosmo
     toc: true
     toc_depth: 2
+    toc_float: true
+     collapsed: false
+     smooth_scroll: false
     fig_caption: true
     fig_width: 6
     fig_height: 4
