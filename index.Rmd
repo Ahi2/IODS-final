@@ -102,7 +102,7 @@ In this assignment, I am going to use different calsses of GNI as the target var
 
 Because an assumption in LDA is that the variables are normally distributed, it is better to first standardize the data before performing the analysis. TO do so, I scale the whole dataset. 
 
-# 2.1. Scaling Dataset  
+# 2.1 Scaling Dataset  
 
 ```{r}
 human2_scaled <- scale(human2)
@@ -115,8 +115,8 @@ class(human2_scaled)
 human2_scaled <- as.data.frame(human2_scaled)
 ```
 
-# 2.2. Creating a categorical variable from GNI
-Because I am interested in different classes of GNI explained by other variables, I now create categorical variables from GNI - which is a continous variable. I cut the variable by quantiles to get high, low, and middle rates of GNI per capita. Each quantile indicates the wealth of a country population. For example, high and low indicate wealthy and poor population, respectively.  
+# 2.2 Creating a categorical variable from GNI
+Because I am interested in different classes of GNI explained by other variables, I now create categorical variables from GNI - which is currently a continous variable. I cut the variable by quantiles to get high, low, and middle rates of GNI per capita. Each quantile indicates the wealth of a country population. For example, high and low indicate wealthy and poor population, respectively.  
 
 First, I look at the summary of GNI.
 
@@ -153,7 +153,7 @@ Now, let's look at the summary of human2_scaled.
 summary(human2_scaled)
 ```
 
-# 2.3. Dividing the data into train and test sets
+# 2.3 Dividing the data into train and test sets
 In order to make prediction using a statistical method, it is important to test how well the predictions fit. To do so, one way is to split the data into test and train sets. As the names imply, the training of the model is done by the train set while the prediction is done using the test set. Let us do this. 
 
 First, I look at the number of rows in the dataset, and save the number in 'n'.
@@ -187,13 +187,21 @@ Then, I remove the GNI_class from the test set.
 test <- dplyr::select(test, -GNI_class)
 ```
 
-# 2.4. Performing Linear Disciminant Analysis
+# 2.4 Performing Linear Disciminant Analysis
 We have now created a catergorical variable of GNI, standardized the data, and splitted it into training and test datasets. We are ready to perform LDA. 
 I now fit a linear discriminant analysis, using GNI_class as the target variable and all the other variables as predictors. Then, I will print it. 
 ```{r}
 lda.fit <- lda(GNI_class ~ ., data = train)
 lda.fit
 ```
+
+The results above indicate that around 24% of the data belong to low GNI. The respective number for other GNI classes, med_low, med_high, and high are around 25%, 27%, and 23%, respectively. We then have the group means of the variables associated with each class.
+
+We can also see that there are three linear discriminants (LD) becauase we have four taget classes. Proportion of trace shows that LD1 explains the majority of between-group variance (~ 88%).   
+
+Looking at the coefficients of the analysis, we can infer that variables such as 'the ratio of Female and Male populations with secondary education' (Edu2.FM) predicts LD1 very well. The results indicate that the higher the values of this variable, the higher LD1. 
+
+# 2.5 Visualizing LDA
 
 LDA can be visualized with a biplot. There is a biplot arrow function [here](https://stackoverflow.com/questions/17232251/how-can-i-plot-a-biplot-for-lda-in-r), which I use to visualize the LDA.
 ```{r}
@@ -218,8 +226,10 @@ plot(lda.fit, dimen = 2, col = classes, pch = classes)
 lda.arrows(lda.fit, myscale = 3)
 ```
 
-# 2.5. Predicting LDA
-Now that we have performed LDA, it is time to predict the values based on the model. We already created the test set to be used for predicting the model. It is a new dataset here, which can tell us how good the model fits our data. 
+In the above plot, each class has been shown by a distinct color. The plot demonstrates that, for instance, life expectancy (Life.Exp) is a significant variable that positively explains LD1 and also LD2. The ratio of females over males with at least secondary education (Edu2.FM) is also significant but negatively explains LD2, while positively explains LD1. 
+
+# 2.6 Predicting LDA
+Now that we have performed LDA, it is time to predict the values based on the model. We already created the test set to be used for predicting the model. The test set is a new dataset here, which can tell us how good the model fits our data. 
 
 I now predict the classes with test data.
 ```{r}
@@ -231,6 +241,6 @@ Then, I create a table of the correct classes and the predicted ones, running cr
 table(correct = correct_classes, predicted = lda.pred$class)
 ```
 
-The above results reveal that in most cases the GNI classes have been predicted correctly, particularly in low and high GNI classes. There are some discripancy in med_low and Med_high, but generally, we can conclude that other variables such as 'the ratio of Female and Male populations with secondary education' (Edu2.FM) and 'Percetange of female representatives in parliament' (Parli.F) predict classes of GNI very well. The results indicate that the higher the values of these two variables the higher the GNI classes, meaning that the country is wealthier when females participate more in education and when they have a more pronounced role in a given country parliament. 
+The above results reveal that in most cases the GNI classes have been predicted correctly, particularly in low and high classes. There are some discrepancy in med_low and Med_high, but generally, we can conclude that, based on the data, the model predicts the classes well. Therefore, different classes of GNI - which divides countries into four categories based on their population income and hence standard of living - can be explained by variables in the model such as life expectancy and the ratio of female over male with secondary education.
 
 
