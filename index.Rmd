@@ -147,4 +147,90 @@ Then, I add the new categorical value, GNI_class, to scaled data.
 human2_scaled <- data.frame(human2_scaled, GNI_class)
 ```
 
+Now, let's look at the summary of human2_scaled.
+
+```{r}
+summary(human2_scaled)
+```
+
+# 2.3. Dividing the data into train and test sets
+In order to make prediction using a statistical method, it is important to test how well the predictions fit. To do so, one way is to split the data into test and train sets. As the names imply, the training of the model is done by the train set while the prediction is done using the test set. Let us do this. 
+
+First, I look at the number of rows in the dataset, and save the number in 'n'.
+```{r}
+n <- nrow(human2_scaled)
+n
+```
+
+I now choose randomly 80% of the rows.
+```{r}
+ind <- sample(n, size = n * 0.8)
+```
+
+Then, I create train set.
+```{r}
+train <- human2_scaled[ind,]
+```
+
+Then, the test set.
+```{r}
+test <- human2_scaled[-ind,]
+```
+
+Now, I tae the GNI classes from the test set and save them as 'correct_classes'.
+```{r}
+correct_classes <- test$GNI_class
+```
+
+Then, I remove the GNI_class from the test set.
+```{r}
+test <- dplyr::select(test, -GNI_class)
+```
+
+# 2.4. Performing Linear Disciminant Analysis
+We have now created a catergorical variable of GNI, standardized the data, and splitted it into training and test datasets. We are ready to perform LDA. 
+I now fit a linear discriminant analysis, using GNI_class as the target variable and all the other variables as predictors. Then, I will print it. 
+```{r}
+lda.fit <- lda(GNI_class ~ ., data = train)
+lda.fit
+```
+
+LDA can be visualized with a biplot. There is a biplot arrow function [here](https://stackoverflow.com/questions/17232251/how-can-i-plot-a-biplot-for-lda-in-r), which I use to visualize the LDA.
+```{r}
+lda.arrows <- function(x, myscale = 1, arrow_heads = 0.1, color = "red", tex = 0.75, choices = c(1,2)){
+  heads <- coef(x)
+  arrows(x0 = 0, y0 = 0, 
+         x1 = myscale * heads[,choices[1]], 
+         y1 = myscale * heads[,choices[2]], col=color, length = arrow_heads)
+  text(myscale * heads[,choices], labels = row.names(heads), 
+       cex = tex, col=color, pos=3)
+}
+```
+
+To continue with plotting, I now create a numeric vector of the train sets crime classes.
+```{r}
+classes <- as.numeric(train$GNI_class)
+```
+
+Now, I plot the lda results. I use lda.arrow function to show the arrows, so the interpretation of the plot will be easier. 
+```{r}
+plot(lda.fit, dimen = 2, col = classes, pch = classes)
+lda.arrows(lda.fit, myscale = 3)
+```
+
+# 2.5. Predicting LDA
+Now that we have performed LDA, it is time to predict the values based on the model. We already created the test set to be used for predicting the model. It is a new dataset here, which can tell us how good the model fits our data. 
+
+I now predict the classes with test data.
+```{r}
+lda.pred <- predict(lda.fit, newdata = test)
+```
+
+Then, I create a table of the correct classes and the predicted ones, running cross tabulation.
+```{r}
+table(correct = correct_classes, predicted = lda.pred$class)
+```
+
+The above results reveal that in most cases the GNI classes have been predicted correctly, particularly in low and high GNI classes. There are some discripancy in med_low and Med_high, but generally, we can conclude that other variables such as 'the ratio of Female and Male populations with secondary education' (Edu2.FM) and 'Percetange of female representatives in parliament' (Parli.F) predict classes of GNI very well. The results indicate that the higher the values of these two variables the higher the GNI classes, meaning that the country is wealthier when females participate more in education and when they have a more pronounced role in a given country parliament. 
+
 
