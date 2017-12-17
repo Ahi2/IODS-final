@@ -19,9 +19,9 @@ In this report, I set out to understand the effect of Gross National Income per 
 In addition, I set out to understand whether variables in the Human Development Report can explain different classes of income, measured by GNI per capita. To do so, I divide GNI per capita into four different categories: low, medium low, medium high, and high. The results reveal that these variables can explain the country income. Finally, I dicuss my findings in more depth.  
 
 # Hypotheses, Analysis, and Variables
-I intend to know the effect of country's income on life expectancy of its population. The anticipation is that people in wealthier countries have a higher life expectancy, as they have higher standard of living, hence healthier and longer life. Accordingly, the following hypothesis is developed:
+I intend to know the effect of a given country's income on life expectancy of its population. I expect that people in wealthier countries have naturally a higher life expectancy, as they have higher standard of living, hence healthier and longer life. Accordingly, the following hypothesis is developed:
 
-H1. People in wealthier countries have higher life expectancy.
+   H. The wealthier the country, the higher the life expectancy of its population.
 
 In order to test the hypothesis, I use the Human Development dataset, developed by the United Nations, created to stress that people and their capaibilities are the ultimate criteria to evaluate the development of a country, not economic growth alone. 
 
@@ -33,18 +33,29 @@ In addition, I intend to explore whether different categories of GNI per capita 
 
 Overall, when combining the two datasets, the following are the variables:
 
-"Country" = Country name
-"GNI" = Gross National Income per capita
-"Life.Exp" = Life expectancy at birth
-"Edu.Exp" = Expected years of schooling 
-"Mat.Mor" = Maternal mortality ratio
+"Country" = Country name 
+"GNI" = Gross National Income per capita 
+
+"Life.Exp" = Life expectancy at birth 
+
+"Edu.Exp" = Expected years of schooling  
+
+"Mat.Mor" = Maternal mortality ratio 
+
 "Ado.Birth" = Adolescent birth rate
+
 "Parli.F" = Percentange of female representatives in parliament
+
 "Edu2.F" = Proportion of females with at least secondary education
+
 "Edu2.M" = Proportion of males with at least secondary education
+
 "Labo.F" = Proportion of females in the labour force
+
 "Labo.M" " Proportion of males in the labour force
+
 "Edu2.FM" = Edu2.F / Edu2.M
+
 "Labo.FM" = Labo2.F / Labo2.M
 
 Observations with missing values have been removed from the dataset in the data wrangling process. 
@@ -77,10 +88,10 @@ library(corrplot)
 library(MASS)
 ```
 
-The first analysis is a multiple linear regression. I go through the regression step-by-step, explaining each step as I run the analysis. Then, I perform the Linear Discriminant Analysis in the secon part of this report. 
+The first analysis is a multiple linear regression. I go through the regression step-by-step, explaining each step as I run the analysis. Then, I perform the Linear Discriminant Analysis in the second part of the report. 
 
 # 1. Multiple Linear Regression 
-I first draw a plot to show the distribution of each variable in the dataset as well as the variables correlations. It is always a good idea and a necessity to know this information before conducting the analysis.
+I first draw a plot to show the distribution of each variable in the dataset as well as the variables correlations. It is always a good idea and sometimes a necessity to know this information before conducting any analysis.
 
 # 1.1 Distributions and correlations of the variables
 
@@ -88,15 +99,15 @@ I first draw a plot to show the distribution of each variable in the dataset as 
 ggpairs(human2)
 ```
 
-The plot above indicates most variables are not distributed normally. This is usually the case with real world data (empirical data). One way to deal with this is standadzing the variables. However, Expected years of schooling (Edu.Exp) and Percetange of female representatives in parliament (Parli.F) seem to have a normal distribution.  
+The plot above indicates most variables are not distributed normally. This is usually the case with real data (empirical ones). One way to deal with this is standadzing the variables. Nonetheless, Expected years of schooling (Edu.Exp) and Percetange of female representatives in parliament (Parli.F) seem to have a rather normal distribution.  
 
 Edu.Exp is also postively and strongly correlated with Life.Exp. It also has a positive - but slightly weaker - correlation with GNI per capita. Edu.Exp also has a positive correlation with GNI per capita, too.  
 
-Another interesting but unsurprising correlation is the negative relationship between Maternal mortality (Mat.Mor) and GNI per capita. MAt.Mor has also a negative and strong correlation with Life.Exp, which comes as no surprise. 
+Another interesting but unsurprising correlation is the negative relationship between Maternal mortality (Mat.Mor) and GNI per capita. Mat.Mor has also a negative and strong correlation with Life.Exp, which comes as no surprise. 
 
 Surprisingly, there seems to be a highly weak correlation between GNI per capita and Percentange of female representatives in parliament (Parli.F). This is surprising since one expects that as the standard of living (measured by GDI per capita) increases, the partipcation of females in political arena rises, too. The results do not confirm this.   
 
-The plot below demonstrate these correlations more clearly. The more bluish the color, the higher and the more positive the correlation. The opposite holds true for the redish color. As examples, Mat.Mor is highly and negatively correlated with Edu.Exp and Life.Exp, while it is positively correlated with Adolescent birth rate (Ado.Birth). Life.Exp is positively correlated with Edu2.FM, Edu.Exp, and GNI per capita, and negatively correlated with Mat.Mor and Ado.Birth.
+The plot below demonstrates these correlations more clearly. The bluish color represents positive correlation. The opposite holds true for the redish color. The higher the correlation, the darker the color. As examples, Mat.Mor is highly and negatively correlated with Edu.Exp and Life.Exp, while it is positively correlated with Adolescent birth rate (Ado.Birth). Life.Exp is positively correlated with Edu2.FM, Edu.Exp, and GNI per capita, and negatively correlated with Mat.Mor and Ado.Birth.
 
 ```{r}
 cor(human2) %>% corrplot
@@ -149,19 +160,19 @@ par(mfrow = c(2,2))
 plot(my_model2, which = c(1,2,5))
 ```
 
-I first explore "Residuls vs Fitted values". This plot is used to understand the linearity of the model, the unequality of error variance, and to check if there is any outliers. Looking at the plot reveals that the residuals are scattered rather randolmy around 0. It could have been better as now they have not formed a horizontal line perfectly; yet this is acceptable. A horizontal line means that the relationship of the variables in our model is linear and also the errors are equal. There are some values that are far from the rest (lower side of the plot); these could be considered as outliers. How influential they are in our model will be determined by another plot, which I look at now.
+I first explore "Residuls vs Fitted values". This plot is used to understand the linearity of the model, the unequality of error variance, and to check if there is any outliers. Looking at the plot reveals that the residuals are scattered rather randolmy around 0. It could have been better as now they have not formed a horizontal line perfectly; yet this is acceptable. A horizontal line means that the relationship of the variables in the model is linear and also the errors are equal. There are some values that are far from the rest (lower side of the plot); these could be considered as outliers. How influential they are in our model will be determined by another plot, which I look at now.
 
-I now explore at the Residuals vs Leverage plot. This plot helps us to understand the influential outliers, those that actually affect our model which are better to be removed. One way to understand those outliers is to look at the Cook's distance lines (dashed red line). If the distance is high, then there are influential outliers. In this plot, some points are far from the Cook's distance line, hence there seem to be influential outlier in the data. In later analysis, these observations should be removed. 
+The Residuals vs Leverage plot. This plot helps us to understand the influential outliers, those that actually affect our model which are better to be removed. One way to understand those outliers is to look at the Cook's distance lines (dashed red line). If the distance is high, then there are influential outliers. In this plot, some points are far from the Cook's distance line, hence there seem to be influential outlier in the data. In later analysis, these observations should be removed. 
 
 Finally, I explore the Normal Q-Q plot. This plot helps to understand whether the variables are distibuted normally. If points in the plot fall on a straight line, the variables have normal distribution. Most points in the plot fall somewhat on a straight line, hence the normality of the distribution of the variables.
 
 # 2. Linear Discriminant Analysis (LDA)
 
-LDA is a supervised classification method which can be used to model several binory vairbales. LDA is a linear transformation technique used for dimensionality reduction. The independent variables are continuous while the target variables are categorical (binery). 
+LDA is a supervised classification method which can be used to model several binery vairbales. LDA is a linear transformation technique used for dimensionality reduction. The independent variables are continuous while the target variables are categorical (binery). 
 
-In this assignment, I am going to use different calsses of GNI as the target variable to see how other variables explain the classes. 
+In this assignment, I am going to use different calsses of GNI as the target variable to  see how other variables explain the classes. 
 
-Because an assumption in LDA is that the variables are normally distributed, it is better to first standardize the data before performing the analysis. TO do so, I scale the whole dataset. 
+Because an assumption in LDA is that the variables are normally distributed, it is better to first standardize the data before performing the analysis. To do so, I scale the whole dataset. 
 
 # 2.1 Scaling Dataset  
 
@@ -306,5 +317,5 @@ The above results reveal that in most cases the GNI classes have been predicted 
 
 # Discussion and conclusion
 In this report, I worked to understand the effect of GNI on population life expectancy, hypothesizing a positive relationship between the two. I performed a regression analysis to test my hypothesis, which was confirmed. In addition, I explored the effect of maternal mortality ratio on life expectancy, obviously expecting a negative relationship. This was also confirmed. The findings reveal that the higher the standard of living in a country, the higher the population life expectancy. Countries whereby people are wealthier, life expectancy is longer. Examples could be people in north and west Europe or people living in Japan.   
-In addition, I intended to understand whether health, knowldge, and empowerment variables explain different categorization of income. In so doing, I divided GNI per capita into four categories. Then, I ran an LDA to explote whether other variables (which were continuous) explain the categories. The model predicted categories well as mentioned in the analysis. This indicates that variables related to, for example, healthy life, knowledge (gained by education), and famle participation in society can explain differnces between country income. For instance, countries in which people are more healthy and educated, while females participate more in society enjoy a higher standard of living.  
+In addition, I intended to understand whether health, knowldge, and empowerment variables explain different categorization of income. In so doing, I divided GNI per capita into four categories. Then, I ran an LDA to explore whether other variables (which were continuous) explain the categories. The model predicted categories well as mentioned in the analysis. This indicates that variables related to, for example, healthy life, knowledge (gained by education), and female participation in society can explain differnces between country income. For instance, countries in which people are more healthy and educated, while females participate more in society enjoy a higher income, hence higher standard of living.  
 
