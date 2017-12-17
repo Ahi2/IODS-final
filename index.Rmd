@@ -14,26 +14,44 @@ output:
     code_folding: hide
 ---
 
-In the assignment the follwing are going to be conducted: 
-
 # Abstract
+In this report, I set out to understand the effect of Gross National Income per capita in  a given country on its population life expactancy. GNI per capita is a established measure to assess the standard of living in a given country; therefore it should positively affect the life expectancy among people of the country. To test my hypothesis, I use linear regression method, and the data from Human Development report gathered by the United Nations. The results show that there is a positive and strong relationship between GNI per capita and life expectancy. 
+In addition, I set out to understand whether variables in the Human Development Report can explain different classes of income, measured by GNI per capita. To do so, I divide GNI per capita into four different categories: low, medium low, medium high, and high. The results reveal that these variables can explain the country income. Finally, I dicuss my findings, and accordingly provide recommendation for future research.      
 
+# Hypotheses, Analysis, and Variables
+I intent to know the effect of country's income on life expectancy of its population. The anticipation is that people in wealthier countries have a higher life expectancy, as they have higher standard of living, hence healthier and longer life. Accordingly, the following hypothesis is developed:
 
-# Hypotheses
-The hypotheses are as follows:
-H1. Gross National Income (GNP) per capita positively affects life expectancy at birth.
+H1. People in wealthier countries have higher life expectancy.
 
+In order to test the hypothesis, I use the Human Development dataset, developed by the United Nations, created to stress that people and their capaibilities are the ultimate criteria to evaluate the development of a country, not economic growth alone. 
 
-# Analysis
-In this section I perform the analysis needed to test my hypotheses. I start with multiple linear regression and will end the report by running a linear discriminant analysis. 
+The data have several indecies. I am interested in two of them for the purpose of this report: Human Development Index and Gender Inequality Index. The former consists of variables such as life expectancy at birth and GNI per capita,  representing long and healthy living and standard of living, respectively. The other index, Gender inequality, as the name implies, looks at the equality between female and male in terms of education, labor participation, and health. It includes variables such as Maternal mortality ratio and Adolescent birth rate.  
 
-I first begin with testing the first hypothesis. To do so, I need to conduct a multiple linear analysis. 
+To perform my analysis and test the hypothesis, I need to combine these two datasets. Then, I use life expectancy at birth (Life.Exp) as the target variable, representing life expectancy. I use GNI per capita as the predictor, representing population wealth in a given country. Due to the nature of the analysis, I need to run a linear regression. 
 
-Reading the data into R
+In addition, I intend to explore whether different categories of GNI per capita can be explained by other variables in my data. Therefore, I need to perform a Linear Discriminant Analysis (LDA), which is a method to classify the data. 
 
-We first start with the first hypothesis. For that, we need to read the human dataset which has been prepared [here](https://github.com/Ahi2/IODS-final/blob/master/create_human2.R), using data wrangling procedure as explained in the link.
+Overall, when combining the two datasets, the following are the variables:
 
-I first read the data again to make sure I am using the correct data. I call it 'human2'. Then, I look at the dtructure, dimensions, and a summary of the dataset.
+"Country" = Country name
+"GNI" = Gross National Income per capita
+"Life.Exp" = Life expectancy at birth
+"Edu.Exp" = Expected years of schooling 
+"Mat.Mor" = Maternal mortality ratio
+"Ado.Birth" = Adolescent birth rate
+"Parli.F" = Percentange of female representatives in parliament
+"Edu2.F" = Proportion of females with at least secondary education
+"Edu2.M" = Proportion of males with at least secondary education
+"Labo.F" = Proportion of females in the labour force
+"Labo.M" " Proportion of males in the labour force
+"Edu2.FM" = Edu2.F / Edu2.M
+"Labo.FM" = Labo2.F / Labo2.M
+
+Observations with missing values have been removed from the dataset in the data wrangling process. 
+
+# Reading the data into R
+The human dataset has been prepared [here](https://github.com/Ahi2/IODS-final/blob/master/create_human2.R), using data wrangling procedure as explained in the link.
+However, to make sure I am using the correct dataset, I read the data wihch is available online. I call it 'human2'. Then, I look at the structure, dimensions, and a summary of the dataset.
 
 ```{r}
 human2 <- read.table("http://s3.amazonaws.com/assets.datacamp.com/production/course_2218/datasets/human2.txt", sep  =",", header = T)
@@ -43,7 +61,7 @@ dim(human2)
 summary(human2)
 ```
 
-Now, let us access the libraries we need.
+As can be seen the data has 155 observations and 8 variables. In addition, the minimum, mean, median, and maximum values of each variable can also be seen. Now, let us access the libraries we need for the analyses. 
 
 ```{r}
 library(tidyr)
@@ -59,52 +77,78 @@ library(corrplot)
 library(MASS)
 ```
 
-The first analysis is a multiple linear regression. 
+The first analysis is a multiple linear regression. I go through the regression step-by-step, explaining each step as I run the analysis. Then, I perform the Linear Discriminant Analysis in the secon part of this report. 
 
 # 1. Multiple Linear Regression 
+I first draw a plot to show the distribution of each variable in the dataset as well as the variables correlations. It is always a good idea and a necessity to know this information before conducting the analysis.
 
 ```{r}
 ggpairs(human2)
 ```
 
+The plot above indicates most variables are not distributed normally. This is usually the case with real world data (empirical data). One way to deal with this is standadzing the variables. However, Expected years of schooling (Edu.Exp) and Percetange of female representatives in parliament (Parli.F) seem to have a normal distribution.  
+
+Edu.Exp is also postively and strongly correlated with Life.Exp. It also has a positive - but slightly weaker - correlation with GNI per capita. Edu.Exp also has a positive correlation with GNI per capita, too.  
+
+Another interesting but unsurprising correlation is the negative relationship between Maternal mortality (Mat.Mor) and GNI per capita. MAt.Mor has also a negative and strong correlation with Life.Exp, which comes as no surprise. 
+
+Surprisingly, there seems to be a highly weak correlation between GNI per capita and Percentange of female representatives in parliament (Parli.F). This is surprising since one expects that as the standard of living (measured by GDI per capita) increases, the partipcation of females in political arena rises, too. The results do not confirm this.   
+
+The plot below demonstrate these correlations more clearly. The more bluish the color, the higher and the more positive the correlation. The opposite holds true for the redish color. As examples, Mat.Mor is highly and negatively correlated with Edu.Exp and Life.Exp, while it is positively correlated with Adolescent birth rate (Ado.Birth). Life.Exp is positively correlated with Edu2.FM, Edu.Exp, and GNI per capita, and negatively correlated with Mat.Mor and Ado.Birth.
+
 ```{r}
 cor(human2) %>% corrplot
 ```
 
-
-```{r}
-qplot(GNI, Life.Exp, data = human2) + geom_smooth(method = "lm")
-
-```
-
-Removing outliers. 
-```{r}
-human2 <- filter(human2, GNI < 80000)
-```
-
+Since I am interested in doing a regression analysis by regressing Life.Exp on GNI (y = Life.Exp and x = GNI), first I draw a qplot of these two variables and fit a regression line. 
 
 ```{r}
 qplot(GNI, Life.Exp, data = human2) + geom_smooth(method = "lm")
 ```
 
+It seems that two of the GNI values are outliers, those higher than 75000 dollars a year. Therefore, I remove them to improve the prediction of the model.
+
+```{r}
+human2 <- filter(human2, GNI < 75000)
+```
+
+Now, I look at the regression line again.
+```{r}
+qplot(GNI, Life.Exp, data = human2) + geom_smooth(method = "lm")
+```
+
+Since I removed the outlier, the regression line seems to better represent the corrlation between GNI and life expectancy. 
+
+Now, I run the regression analysis. Then, I interpret the results.
 
 ```{r}
 my_model <- lm(Life.Exp ~ GNI, data = human2) 
 summary(my_model)
 ```
 
+The results above indicate that GNI is a strong predictor of life expectancy. The P-Value is very marginal. R-square is also high, meaning that the model explains around half of the variance of the target variable, that is, life expectancy.  
+
+Now, I add another predictor to explore whether other variables predict life expectance. To do so, I add Mat.Mor. Therefore, I need to run a multiple linear regression, in which there are more than one predictor of target variable. 
 
 ```{r}
 my_model2 <- lm(Life.Exp ~ GNI + Mat.Mor, data = human2)
 summary(my_model2)
 ```
 
+As the results indicate, the model is signifcant. The new variable is highly signifcant, too, with a very small P-value. As expected Mat.Mor negatively affects life expectancy. In addition, the R-squated has increased, which is natural as the number of variables increases, R squared also increases. 
+
+Now, I explore the validity of my model graphically. To do so, I use  the following plots: Residuals vs Fitted values, Normal QQ-plot, and Residuals vs Leverage.
 
 ```{r}
 par(mfrow = c(2,2))
 plot(my_model2, which = c(1,2,5))
 ```
 
+I first explore "Residuls vs Fitted values". This plot is used to understand the linearity of the model, the unequality of error variance, and to check if there is any outliers. Looking at the plot reveals that the residuals are scattered rather randolmy around 0. It could have been better as now they have not formed a horizontal line perfectly; yet this is acceptable. A horizontal line means that the relationship of the variables in our model is linear and also the errors are equal. There are some values that are far from the rest (lower side of the plot); these could be considered as outliers. How influential they are in our model will be determined by another plot, which I look at now.
+
+I now explore at the Residuals vs Leverage plot. This plot helps us to understand the influential outliers, those that actually affect our model which are better to be removed. One way to understand those outliers is to look at the Cook's distance lines (dashed red line). If the distance is high, then there are influential outliers. In this plot, some points are far from the Cook's distance line, hence there seem to be influential outlier in the data. In later analysis, these observations should be removed. 
+
+Finally, I explore the Normal Q-Q plot. This plot helps to understand whether the variables are distibuted normally. If points in the plot fall on a straight line, the variables have normal distribution. Most points in the plot fall somewhat on a straight line, hence the normality of the distribution of the variables.
 
 # 2. Linear Discriminant Analysis (LDA)
 
