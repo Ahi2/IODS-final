@@ -1,18 +1,31 @@
 ---
 title: "IODS-final"
 author: "Mohamadali Ahi; mohamadali.ahi@helsinki.fi"
-date: "15 joulukuuta 2017"
+date: "15 December 2017"
 output:
   html_document:
     df_print: paged
-
+    theme: cosmo
+    toc: true
+    toc_depth: 2
+    fig_caption: true
+    fig_width: 6
+    fig_height: 4
+    code_folding: hide
 ---
 
 In the assignment the follwing are going to be conducted: 
 
-# hypotheses
+# Abstract
+
+
+# Hypotheses
 The hypotheses are as follows:
 H1. Gross National Income (GNP) per capita positively affects life expectancy at birth.
+
+
+# Analysis
+In this section I perform the analysis needed to test my hypotheses. I start with multiple linear regression and will end the report by running a linear discriminant analysis. 
 
 # 1. Multiple Linear Regression
 
