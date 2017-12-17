@@ -27,11 +27,9 @@ H1. Gross National Income (GNP) per capita positively affects life expectancy at
 # Analysis
 In this section I perform the analysis needed to test my hypotheses. I start with multiple linear regression and will end the report by running a linear discriminant analysis. 
 
-# 1. Multiple Linear Regression
+I first begin with testing the first hypothesis. To do so, I need to conduct a multiple linear analysis. 
 
-I first begin with testing the first hypothesis. To do so, I need to conducta multiple linear analysis. 
-
-# Reading the data into R
+Reading the data into R
 
 We first start with the first hypothesis. For that, we need to read the human dataset which has been prepared [here](https://github.com/Ahi2/IODS-final/blob/master/create_human2.R), using data wrangling procedure as explained in the link.
 
@@ -61,6 +59,7 @@ library(corrplot)
 library(MASS)
 ```
 
+The first analysis is a multiple linear regression. 
 
 # 1. Multiple Linear Regression 
 
