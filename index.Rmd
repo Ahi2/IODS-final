@@ -15,7 +15,7 @@ output:
 ---
 
 # Abstract
-In this report, I set out to understand the effect of Gross National Income per capita in  a given country on its population life expactancy. GNI per capita is a established measure to assess the standard of living in a given country; therefore it should positively affect the life expectancy among people of the country. To test my hypothesis, I use linear regression method, and the data from Human Development report gathered by the United Nations. The results show that there is a positive and strong relationship between GNI per capita and life expectancy. 
+In this report, I set out to understand the effect of Gross National Income per capita in  a given country on its population life expactancy. GNI per capita is a established measure to assess the standard of living in a given country; therefore, it should positively affect the life expectancy of the people in the country. To test my hypothesis, I use linear regression method, and the data from Human Development report gathered by the United Nations. The results show that there is a positive and strong relationship between GNI per capita and life expectancy. 
 In addition, I set out to understand whether variables in the Human Development Report can explain different classes of income, measured by GNI per capita. To do so, I divide GNI per capita into four different categories: low, medium low, medium high, and high. The results reveal that these variables can explain the country income. Finally, I dicuss my findings in more depth.  
 
 # Hypotheses, Analysis, and Variables
